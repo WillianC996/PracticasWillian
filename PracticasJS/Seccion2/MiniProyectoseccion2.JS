@@ -192,7 +192,7 @@ class ListaTareas {
   }
 
   completarTarea(nombreTarea){
-    let indice = this.tareas.findIndex(tarea => tarea.nombre === nombreTarea);
+    let indice = this.tareas.findIndex(tarea => tarea.nombre.toLowerCase() === nombreTarea.toLowerCase());
     if (indice !== -1) {
     this.tareas[indice].completada = true;
     alert(`-- COMPLETAR TAREA --\nHas marcado '${nombreTarea}' como completada`);
@@ -202,19 +202,23 @@ class ListaTareas {
   }
 
   eliminarTarea(nombreTarea){
-    let indice = this.tareas.findIndex(tarea => tarea.nombre === nombreTarea);
+    let indice = this.tareas.findIndex(tarea => tarea.nombre.toLowerCase() === nombreTarea.toLowerCase());
     if (indice >= 0){
       alert (`-- ELIMINAR TAREA --\nLa tarea ha sido eliminada`);
       this.tareas.splice(indice, 1);
     } else {
-      alert (`-- ELIMINAR TAREA --\nNo se pudo encontrar la tarea`);
+      alert (`-- ELIMINAR TAREA --\nNo se encontro la tarea '${nombreTarea}'`);
     }
   }
 
   verTareas(){
-    this.tareas.forEach((tarea, indice) => {
-      alert(`${indice + 1}. ${tarea.nombre} - ${tarea.completada ? "Completada" : "Sin completar"}`);
-    });
+    let imprimirLista = ``;
+    let contador = 1;
+    for (let tarea of this.tareas){
+      imprimirLista += `${contador}. ${tarea.nombre} - ${tarea.completada ? "Completada" : "Sin completar"} - ${tarea.fecha}\n  ${tarea.descripcion}\n\n`;
+      contador++;
+    }
+    alert(imprimirLista);
   }
 }
 
@@ -225,13 +229,13 @@ tarea3 = new Tarea ('Sacar la basura','Sacar la basura para el basurero','8/11/2
 
 let arrayTareas = [tarea1, tarea2, tarea3];
 let listaDeTareas = new ListaTareas(arrayTareas);
-let fecha = new Date()
+let fecha = new Date();
 let continuar = true;
 
 do{
 let opcionMenu = prompt(`-- MENU --\nSelecciona una accion:\n1. Agregar tarea\n2. Completar tarea\n3. Eliminar tarea\n4. Ver tareas\n5. Salir`).toLowerCase()
 
-if(opcionMenu == ('agregar' || 'agregar tareas' || 1)){
+if(opcionMenu=='agregar' || opcionMenu=='agregar tareas' || opcionMenu=='1'){
   let
     agregarNombre = prompt(`-- AGREGAR TAREA --\nIngresa el nombre de tu tarea:`),
     agregarDescripcion = prompt(`-- AGREGAR TAREA --\nIngresa la descripcion de tu tarea:`),
@@ -239,32 +243,22 @@ if(opcionMenu == ('agregar' || 'agregar tareas' || 1)){
     agregarTarea = new Tarea (agregarNombre, agregarDescripcion, agregarFecha);
   listaDeTareas.agregarTarea(agregarTarea)
 }
-else if(opcionMenu == ('completar' || 'completar tarea' || 2)){
+else if(opcionMenu =='completar' || opcionMenu=='completar tarea' || opcionMenu=='2'){
   let completarNombre = prompt(`-- COMPLETAR TAREA --\nIngresa el nombre de la tarea a completar:`);
   listaDeTareas.completarTarea(completarNombre)
 }
-else if(opcionMenu == ('eliminar' || 'eliminar tarea' || 3)){
+else if(opcionMenu =='eliminar' || opcionMenu=='eliminar tarea' || opcionMenu=='3'){
   let eliminarNombre = prompt(`-- ELIMINAR TAREA --\nIngresa el nombre de la tarea que quieres eliminar:`);
   listaDeTareas.eliminarTarea(eliminarNombre)
 }
-else if(opcionMenu == ('ver' || 'ver tareas' || 4)){
+else if(opcionMenu =='ver' || opcionMenu=='ver tareas' || opcionMenu=='4'){
   listaDeTareas.verTareas()
 }
-else if (opcionMenu == ('salir' || 5)){
+else if (opcionMenu =='salir' || opcionMenu=='5'){
   alert(`-- SALIR -- Vuelve pronto!`);
   continuar = false;
-  break;
 }
 else{
   opcionMenu = prompt(`-- MENU --\nOpcion no valida, selecciona una accion:\n1. Agregar tarea\n2. Completar tarea\n3. Eliminar tarea\n4. Ver tareas\n5. Salir`).toLowerCase()
 }
-let volverMenu = prompt(`Deseas volver al Menu? (S / N)`).toLowerCase();
-    if (volverMenu === 'n'){
-      alert(`Saliendo de tu lista...\nVuelve pronto!`);
-      continuar = false;
-    } else if (volverMenu === 'n') {
-      continue;
-    } else {
-      volverMenu = prompt(`Opcion invalida.\nDeseas volver al menu? (S / N)`).toLowerCase();
-    }
 } while(continuar);
