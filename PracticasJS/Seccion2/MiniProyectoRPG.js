@@ -211,7 +211,7 @@ while (personajes.filter(p => p.vida > 0).length > 1) {
   }
   let personajesVivos = [...personajes];
   //elige orden segun velocidad
-personajesVivos.sort((a, b) => {
+  personajesVivos.sort((a, b) => {
     let velocidadRandomA = Math.random() * a.velocidad;
     let velocidadRandomB = Math.random() * b.velocidad;
     return velocidadRandomB - velocidadRandomA;
@@ -231,7 +231,7 @@ personajesVivos.sort((a, b) => {
         personaje.ataqueDefinitivo(objetivo);
         personaje.definitiva = true;
       } else {
-        console.log(`${personaje.nombre} ha intentado usar el su uataque definitivo sin exito`); //agregamos un ataque base de tomarse la opcion de nuevo
+        console.log(`${personaje.nombre} ha intentado usar el su ataque definitivo sin exito`); //agregamos un ataque base de tomarse la opcion de nuevo
         personaje.atacar(objetivo);
       }
     } else {
