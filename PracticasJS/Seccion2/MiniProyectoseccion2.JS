@@ -40,25 +40,36 @@
 7. Cuando elija no, se agradece y rompe el codigo
 */
 
+/**
+ *@function piedraPapelTijera - Implementa el juego de piedra, papel o tijera.
+ * Permite al usuario jugar contra la computadora y lleva un registro de las puntuaciones.
+ */
 function piedraPapelTijera (){
+  // Definimos las opciones posibles y sus relaciones de ganar y perder.
   const opciones = [
     {nombre:'piedra', gana:'tijera', pierde:'papel'},
     {nombre:'papel', gana:'piedra', pierde:'tijera'},
     {nombre: 'tijera', gana: 'papel', pierde: 'piedra'}
   ];
+  // Inicializamos variables para llevar el conteo de rondas y puntuaciones.
   let 
     ronda = 1,
     continuar = true,
     puntuacionComputadora = 0,
     puntuacionUsuario = 0,
     puntuacionEmpate = 0;
+  // Bucle principal del juego
   do{
+    // La computadora elige una opción al azar.
     const opcionComputadora = opciones[Math.floor(Math.random()*3)].nombre;
+    // El usuario elige una opción. Se valida que la opción sea válida.
     let opcionUsuario = prompt(`-- Ronda ${ronda} --\nIngresa una opcion (Piedra, Papel o Tijera):`).toLowerCase();
     if (!opciones.some(opcion => opcion.nombre === opcionUsuario)) {
       opcionUsuario = prompt('Opcion invalida.\nIngresa una opcion (Piedra, Papel o Tijera):').toLowerCase();
     }
+    // Se busca el objeto de la opción del usuario para determinar el ganador.
     let objetoElegido = opciones.find(opcion => opcion.nombre === opcionUsuario);
+    // Se compara la opción del usuario con la de la computadora y se actualiza la puntuación.
     if (opcionComputadora === objetoElegido.pierde){
       alert(`La computadora eligio ${opcionComputadora}\nPerdiste con ${opcionUsuario}`);
       puntuacionComputadora++;
@@ -69,7 +80,9 @@ function piedraPapelTijera (){
       alert(`La computadora tambien eligio ${opcionComputadora}\nEs un empate`);
       puntuacionEmpate++;
     }
+    // Se pregunta al usuario si desea continuar jugando.
     let seguir = prompt(`Deseas seguir jugando? (S / N)`).toLowerCase();
+    // Se actualiza el contador de rondas y se muestran las puntuaciones.
     if (seguir === 's'){
       alert(`-- puntuaciones --\n Tu: ${puntuacionUsuario}\n Computadora: ${puntuacionComputadora}\n Empates: ${puntuacionEmpate}`);
     } else if (seguir === 'n'){
@@ -82,6 +95,7 @@ function piedraPapelTijera (){
   } while (continuar)
 }
 piedraPapelTijera ()
+
 //2
 /*
   2. Crea un juego de adivinar un numero aleatorio
@@ -113,33 +127,50 @@ piedraPapelTijera ()
 7. Se hace el loop un maximo de 6 veces hasta encontrar el numero
 8. de no ser encontrado en los 6 intentos se alerta al usuario que perdio y se resetea el codigo (se pregunta si desea jugar de nuevo)
 */
+
+/**
+ * @function comparadorNumerico - Implementa un juego de adivinar un número aleatorio entre 1 y 100.
+ * El usuario tiene 6 intentos para adivinar el número con pistas respecto al valor.
+ */
 function comparadorNumerico(){
-  //declaramos la ronda inicial
+  // Genera un número aleatorio entre 1 y 100 y lo almacena.
+  const numeroRandom = Math.floor(Math.random()*100)+1;
+  // Inicializa el contador de rondas e intentos.
   let ronda = 1;
-  const numeroRandom = Math.floor(Math.random()*100)+1 //se elige un numero random
-  do { 
-    let numeroImput = parseFloat(prompt('Ingresa un numero entre 1 y 100')); //se pide un numero al usuario
-    //se evaluan casos fuera de lo pedido
+  let intentosMaximos = 6;
+  // Bucle principal del juego, se repite hasta que se adivina el número o se agotan los intentos.
+  do {
+    // Solicita al usuario que ingrese un número y lo convierte a un número flotante.
+    let numeroImput = parseFloat(prompt('Ingresa un numero entre 1 y 100'));
+    // Valida si el número ingresado es válido (un número entre 1 y 100).
     if ( isNaN(numeroImput) || numeroImput > 100 || numeroImput < 1) {
+      // Si el número es inválido, se vuelve a solicitar al usuario.
       alert('Número inválido. Ingresa un número entre 1 y 100:');
-      comparadorNumerico();
+      continue; // Vuelve al inicio del bucle sin incrementar la ronda.
     }
+    // Compara el número ingresado por el usuario con el número aleatorio.
     if (numeroImput < numeroRandom){
-      alert(`Ronda ${ronda}:\n${numeroImput} es Menor al Numero`);
+      // Si el número ingresado es menor, informa al usuario y actualiza el contador de intentos.
+      alert(`Ronda ${ronda}:\n${numeroImput} es Menor al Numero.\nTe quedan ${intentosMaximos - ronda} intentos.`);
     } else if (numeroImput > numeroRandom){
-      alert(`Ronda ${ronda}:\n${numeroImput} es Mayor al Numero`);
+      // Si el número ingresado es mayor, informa al usuario y actualiza el contador de intentos.
+      alert(`Ronda ${ronda}:\n${numeroImput} es Mayor al Numero.\nTe quedan ${intentosMaximos - ronda} intentos.`);
     } else {
+      // Si el número ingresado es igual, el usuario ha ganado.
       alert(`Ronda ${ronda}:\n${numeroImput} es el numero correcto, has ganado!`);
-      comparadorNumerico();
+      // Si adivinó, se sale del bucle.
+      break;
     }
-    console.log(numeroRandom)
+    // Incrementa el contador de rondas.
     ronda++;
-  } while (ronda <= 6);
-  if (ronda > 6) {
+  } while (ronda <= intentosMaximos);
+  // Si se agotaron los intentos, se informa al usuario que ha perdido y revela el número aleatorio.
+  if (ronda > intentosMaximos) {
     alert(`¡Has perdido! ya no te quedan intentos\nEl número era ${numeroRandom}`);
   }
 }
 comparadorNumerico();
+
 //3
 /*
   3. Crea un programa orientado a objetos que sea un gestor
@@ -172,7 +203,18 @@ comparadorNumerico();
   4. preguntar si desea regresar al menu o salir
   5.repetir el proceso*/
 
+/**
+ * @class Tarea
+ * Representa una tarea con un nombre, descripción, fecha de creación y estado de completación.
+ */
 class Tarea {
+  /**
+   * Crea una nueva instancia de Tarea.
+   * @param {string} nombre - El nombre de la tarea.
+   * @param {string} descripcion - Una descripción detallada de la tarea.
+   * @param {string} fecha - La fecha de creación de la tarea en formato DD/MM/AAAA.
+   * @param {boolean} [completada=false] - Indica si la tarea está completada.
+   */
   constructor(nombre, descripcion, fecha, completada = false) {
     this.nombre = nombre;
     this.descripcion = descripcion;
@@ -181,16 +223,29 @@ class Tarea {
   }
 }
 
+/**
+ * @class ListaTareas
+ * Gestiona una lista de tareas.
+ */
 class ListaTareas {
+  /**
+   * @constructor
+   * @param {array} tareas - Lista de tareas disponibles
+   */
   constructor(tareas = []) {
     this.tareas = tareas;
   }
-
+  /**
+   * @method agregarTarea - Agrega una tarea a la lista 
+   */
   agregarTarea(tarea){
     this.tareas.push(tarea);
     alert(`-- AGREGAR TAREA --\nHas agregado una nueva tarea!`);
   }
 
+  /**
+   * @method completarTarea - Marca una taea de la lista como completada
+   */
   completarTarea(nombreTarea){
     let indice = this.tareas.findIndex(tarea => tarea.nombre.toLowerCase() === nombreTarea.toLowerCase());
     if (indice !== -1) {
@@ -201,6 +256,9 @@ class ListaTareas {
     }
   }
 
+  /**
+   * @method eliminarTarea - Elimina de la lista una tarea seleccionada
+   */
   eliminarTarea(nombreTarea){
     let indice = this.tareas.findIndex(tarea => tarea.nombre.toLowerCase() === nombreTarea.toLowerCase());
     if (indice >= 0){
@@ -211,6 +269,9 @@ class ListaTareas {
     }
   }
 
+  /**
+   * @method imprimirLista - Le muestra al usuario la lista de tareas vigente 
+   */
   verTareas(){
     let imprimirLista = ``;
     let contador = 1;
